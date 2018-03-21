@@ -1,0 +1,9 @@
+{
+  "Name": "fuckmy.cat",
+  "RequestURL": "https://fuckmy.cat/s/api/upload.php",
+  "FileFormName": "file",
+  "Arguments": {
+    "key": "INSERT KEY",
+  },
+  "URL": "$json:url$"
+}

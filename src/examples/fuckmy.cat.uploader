@@ -1,0 +1,17 @@
+{
+    "name": "fuckmy.cat",
+    "target": "https://fuckmy.cat/s/api/upload.php",
+    "format": "multipart-form-data",
+    "body": [
+        {
+            "__Content-Type": "/%contenttype/",
+            "filename": "/image.%format/",
+            "body": "/%imagedata/"
+        },
+        {
+            "body": "INSERT KEY",
+            "name": "key"
+        }
+    ],
+    "return": ".url"
+}

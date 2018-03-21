@@ -1,0 +1,181 @@
+body{
+    background-color: black;
+    color: white;
+    font-family: "Courier New";
+    text-align: center;
+}
+.wrapper{
+    width: 100%;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background-color: #202020;
+    padding: 2em;
+}
+.bigwrapper{
+    width: 100%;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background-color: #202020;
+}
+.inBigWrapper{
+    text-align: left;
+    margin: 2em;
+}
+hr{
+    margin-top: 1.5em;
+    margin-bottom: 0;
+    color: #4C4C4C;
+}
+.sometxt{
+    text-align: left;
+    margin-left: 1em;
+}
+.gr{
+    color: #A0A0A0;
+    text-decoration: underline;
+    cursor: pointer;
+}
+.homeContainer{
+    margin: 0 auto;
+}    
+.formContainer{
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-around;
+    align-items: center;
+    margin: auto;
+}
+.inHome{
+    margin: 0 auto;
+    min-width: 15em;
+    width: 70%;
+}
+.inForm{
+    min-width: 30%;
+    height: 2em;
+}
+.bigger{
+    min-width: 65%;
+}
+.paddingtop{
+    padding-top: 2em;
+}
+.button{
+    width: 100%;
+    margin: 0 auto;
+    margin-top: 1em;
+    background-color: gray;
+    height: 1.5em;
+    line-height: 1.7em;
+    cursor: pointer;
+    border-radius: 4px;
+}
+.button5em{
+    width: 5em;
+}
+.nomargintop{
+    margin-top: 0px;
+}
+.info{
+    cursor: pointer;
+    margin-top: 2em;
+    font-size: 0.8em;
+}
+.info:hover{
+    text-decoration: underline;
+}
+.small{
+    font-size: 0.8em;
+}
+b{
+    font-size: 1.2em;
+}
+.btnWrapper{
+    text-align: center;
+    width: 10em;
+}
+.uploads{
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    align-items: center;
+    width: 90%;
+    margin: auto;
+}
+.spacelol{
+    width: 0em;
+}
+.upl{
+    width: 22em;
+    height: 18em;
+    padding: 1em;
+    margin: 1em;
+    background-color: #202020;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+.uplImg{
+    cursor: pointer;
+    max-height: 80%;
+    width: 100%;
+    object-fit: contain;
+    margin-bottom: 1em;
+}
+.transparent{
+    border-color: rgba(0,0,0,0);
+}
+.prevNext{
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    alitn-items: center;
+    width: 25em;
+    margin: auto;
+}
+.prNxt{
+    width: 8em;
+    margin: 2em;
+}
+.smolflex{
+    margin: 0.5em auto;
+    display: flex;
+    width: 50%;
+    justify-content: space-around;
+}
+.pages{
+    margin: 0.5em auto;
+    display: flex;
+    justify-content: center;
+}
+.inPages{
+    border: 1px solid white;
+    width: 3em;
+    height: 2em;
+    line-height: 2em;
+}
+.inPages:hover{
+    cursor: pointer;
+    background-color: #505050;
+}
+.pageInput{
+    border: none;
+    outline: none;
+    background-color: transparent;
+    font-size: 1em;
+    width: 100%;
+    text-align: center;
+}
+@media only screen and (min-width: 768px){
+    .wrapper{
+        width: 25em;
+    }
+    .bigwrapper{
+        min-width: 30em;
+        width: 70%;
+    }
+}

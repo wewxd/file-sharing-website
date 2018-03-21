@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <link rel="stylesheet" href="style.css">
+        <script src="https://code.jquery.com/jquery-3.3.1.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script>
+        <script>
+            $(()=>{
+                $(document).on('click', '.uplImg', function(){
+                    location.href=$(this).parent().find('a').attr('href')
+                })
+                $(document).on('click', '.delete', function(){
+                    $.post('api/delete.php', {file: $(this).closest('.upl').attr('id')}, data=>{
+                        data=JSON.parse(data)
+                        if(data.success===false){
+                            alert(data.msg)
+                        }else{
+                            $(this).closest('.upl').remove()
+                        }
+                    })
+                })
+                $(document).on('click', '.inPages', function(){
+                    if($(this).attr('id')==='first') page=1
+                    if($(this).attr('id')==='prev') page=Math.max(1, page-nbPerPage)
+                    if($(this).attr('id')==='next') page=Math.min(total-nbPerPage+1, page+nbPerPage)
+                    if($(this).attr('id')==='last') page=total-nbPerPage+1
+                    update(page)
+                })
+                $('#pageInput').keyup(ev=>{
+                    if(ev.keyCode===13){
+                        page=Math.min($('#pageInput').val(), total-nbPerPage+1)
+                        update(page)
+                    }
+                })
+
+                function update(offset){
+                    $.post('require/getUploads.php', {offset: offset}, data=>{
+                        try{
+                            data=JSON.parse(data)
+                            $('#st').empty().append(data.start)
+                            $('#end').empty().append(data.end)
+                            $('#total').empty().append(data.total)
+                            $('#pageInput').val(data.start)
+                            total=data.total
+                            $('#uploads').empty()
+                            data.data.forEach(upl=>{
+                                let str='<div class="upl" id="'+upl.id+'">'
+                                if(upl.type.startsWith('image')){
+                                    str+='<img class="uplImg" src="'+upl.url+'">'
+                                }
+                                str+=upl.name+'<div class="smolflex"><div>'
+                                str+='<a class="gr" href="'+upl.url+'">'+upl.newName+'</a></div>'
+                                str+='<div>-</div><div class="gr delete">delete</div></div>'
+                                $('#uploads').append(str)
+                            })
+                        }catch(e){$('#uploads').append(data)}
+                    })
+                }
+
+                // nbPerPage does not impact the number of files returned by the server
+                let nbPerPage=10
+                let total
+                let page=1
+                update(page)
+            })
+        </script>
+    </head>
+    <body>
+        <h2>Your uploads</h2>
+        <hr class="transparent">
+        Showing files <span id="st"></span> to <span id="end"></span> (total: <span id="total"></span>)
+        <div class="pages">
+            <div id="first" class="inPages">&#8249;&#8249;</div>
+            <div id="prev" class="inPages">&#8249;</div>
+            <div id="act" class="inPages"><input id="pageInput" class="pageInput"></div>
+            <div id="next" class="inPages">&#8250;</div>
+            <div id="last" class="inPages">&#8250;&#8250;</div>
+        </div>
+        <div id="uploads" class="uploads"></div>
+    </body>
+</html>
