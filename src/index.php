@@ -1,7 +1,7 @@
 <?php 
 if(empty($_COOKIE['apikey'])){
-    require './require/login.html';
+    require_once './require/login.html';
 }else{
-    require './require/home.php';
+    require_once './require/home.php';
 }
 ?>

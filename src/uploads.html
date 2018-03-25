@@ -4,12 +4,15 @@
         <meta charset="utf8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <link rel="stylesheet" href="style.css">
+        <title>Uploads</title>
         <script src="https://code.jquery.com/jquery-3.3.1.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script>
         <script>
             $(()=>{
+                // Make the images clickable as links
                 $(document).on('click', '.uplImg', function(){
                     location.href=$(this).parent().find('a').attr('href')
                 })
+                // Delete a file
                 $(document).on('click', '.delete', function(){
                     $.post('api/delete.php', {file: $(this).closest('.upl').attr('id')}, data=>{
                         data=JSON.parse(data)
@@ -20,20 +23,31 @@
                         }
                     })
                 })
-                $(document).on('click', '.inPages', function(){
+                // Pagination: arrows
+                $(document).on('click', '.clickable', function(){
                     if($(this).attr('id')==='first') page=1
-                    if($(this).attr('id')==='prev') page=Math.max(1, page-nbPerPage)
-                    if($(this).attr('id')==='next') page=Math.min(total-nbPerPage+1, page+nbPerPage)
-                    if($(this).attr('id')==='last') page=total-nbPerPage+1
+                    if($(this).attr('id')==='prev') page=Math.max(1, page-filesPerPage)
+                    if($(this).attr('id')==='next') page=Math.min(total-filesPerPage+1, page+filesPerPage)
+                    if($(this).attr('id')==='last') page=total-filesPerPage+1
                     update(page)
                 })
-                $('#pageInput').keyup(ev=>{
-                    if(ev.keyCode===13){
-                        page=Math.min($('#pageInput').val(), total-nbPerPage+1)
+                // Pagination: text input
+                $('#pageInput').on('click', function(){
+                    $(this).val('')
+                })
+                $('#pageInput').keydown(function(event){
+                    if(event.key.match(/\D/)) event.preventDefault()
+                    if(event.keyCode===13){
+                        $(this).blur()
+                        if($(this).val()=='') $(this).val('1')
+                        page=$('#pageInput').val()
+                        page=Math.min(page, total-filesPerPage+1)
+                        page=Math.max(page, 1)
                         update(page)
                     }
                 })
 
+                // Reload the files
                 function update(offset){
                     $.post('require/getUploads.php', {offset: offset}, data=>{
                         try{
@@ -44,6 +58,7 @@
                             $('#pageInput').val(data.start)
                             total=data.total
                             $('#uploads').empty()
+                            filesPerPage=data.data.length
                             data.data.forEach(upl=>{
                                 let str='<div class="upl" id="'+upl.id+'">'
                                 if(upl.type.startsWith('image')){
@@ -58,8 +73,8 @@
                     })
                 }
 
-                // nbPerPage does not impact the number of files returned by the server
-                let nbPerPage=10
+                // Initialisation
+                let filesPerPage
                 let total
                 let page=1
                 update(page)
@@ -71,11 +86,11 @@
         <hr class="transparent">
         Showing files <span id="st"></span> to <span id="end"></span> (total: <span id="total"></span>)
         <div class="pages">
-            <div id="first" class="inPages">&#8249;&#8249;</div>
-            <div id="prev" class="inPages">&#8249;</div>
-            <div id="act" class="inPages"><input id="pageInput" class="pageInput"></div>
-            <div id="next" class="inPages">&#8250;</div>
-            <div id="last" class="inPages">&#8250;&#8250;</div>
+            <div id="first" class="clickable inPages">&#8249;&#8249;</div>
+            <div id="prev" class="clickable inPages">&#8249;</div>
+            <div id="act" class="inPages"><input id="pageInput" type="text" class="pageInput"></div>
+            <div id="next" class="clickable inPages">&#8250;</div>
+            <div id="last" class="clickable inPages">&#8250;&#8250;</div>
         </div>
         <div id="uploads" class="uploads"></div>
     </body>

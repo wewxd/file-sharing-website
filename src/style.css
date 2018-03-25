@@ -25,11 +25,7 @@ body{
     text-align: left;
     margin: 2em;
 }
-hr{
-    margin-top: 1.5em;
-    margin-bottom: 0;
-    color: #4C4C4C;
-}
+
 .sometxt{
     text-align: left;
     margin-left: 1em;
@@ -39,9 +35,7 @@ hr{
     text-decoration: underline;
     cursor: pointer;
 }
-.homeContainer{
-    margin: 0 auto;
-}    
+    
 .formContainer{
     display: flex;
     flex-wrap: wrap;
@@ -61,6 +55,9 @@ hr{
 .bigger{
     min-width: 65%;
 }
+.margintop{
+    margin-top:1em;
+}
 .paddingtop{
     padding-top: 2em;
 }
@@ -79,14 +76,6 @@ hr{
 }
 .nomargintop{
     margin-top: 0px;
-}
-.info{
-    cursor: pointer;
-    margin-top: 2em;
-    font-size: 0.8em;
-}
-.info:hover{
-    text-decoration: underline;
 }
 .small{
     font-size: 0.8em;
@@ -110,7 +99,7 @@ b{
     width: 0em;
 }
 .upl{
-    width: 22em;
+    width: 21em;
     height: 18em;
     padding: 1em;
     margin: 1em;
@@ -153,6 +142,11 @@ b{
     justify-content: center;
 }
 .inPages{
+    -webkit-user-select: none;
+    -khtml-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
     border: 1px solid white;
     width: 3em;
     height: 2em;
@@ -163,6 +157,7 @@ b{
     background-color: #505050;
 }
 .pageInput{
+    color: white;
     border: none;
     outline: none;
     background-color: transparent;
@@ -170,12 +165,25 @@ b{
     width: 100%;
     text-align: center;
 }
+.blackInput{
+    font-family: inherit;
+    border: 1px solid black;
+    border-radius: 4px;
+    padding: 0.3rem;
+    font-size: 0.8em;
+    width: 10rem;
+    outline: none;
+    background-color: #050505;
+    color: white;
+}
+.blackInput:focus{
+    border: 1px solid #b82525;
+}
 @media only screen and (min-width: 768px){
     .wrapper{
         width: 25em;
     }
     .bigwrapper{
-        min-width: 30em;
-        width: 70%;
+        width: 37em;
     }
 }

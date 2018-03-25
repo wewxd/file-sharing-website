@@ -1,5 +1,5 @@
 <?php
-require '../require/dblogin.php';
+require_once '../require/dblogin.php';
 
 // check if the user is allowed to delete the file
 if(!empty($_POST['key'])){

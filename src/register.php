@@ -9,6 +9,7 @@ if(file_exists(getenv('HOME').'/fmc.conf')){
 <html>
     <head>
         <meta charset="utf8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <script src="https://code.jquery.com/jquery-3.3.1.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script>
         <link rel="stylesheet" href="style.css" />
         <title>New account</title>
@@ -33,19 +34,18 @@ if(file_exists(getenv('HOME').'/fmc.conf')){
         <div class="sometxt">
             hi<br><br>
             Here's a form you can fill if you want an account<br><br>
-            You can upload up to <?php echo $conf['maxSizeTxt']; ?>. After that, your old files get deleted as you upload new files.
+            You can upload up to <?php echo round($conf['newAccountMaxSize']/1000000); ?> MB. After that, your old files get deleted as you upload new files.
         </div>
-        <hr>
         <form id="form" action="api/newacc.php" method="post">
             <div class="formContainer paddingtop">
                 <div class="inForm">name</div>
-                <div class="inForm bigger"><input type="text" id="name" name="name"></div>
+                <div class="inForm bigger"><input class="blackInput" type="text" id="name" name="name"></div>
                 <div class="inForm">email</div>
-                <div class="inForm bigger"><input type="text" id="email" name="email"></div>
+                <div class="inForm bigger"><input class="blackInput" type="text" id="email" name="email"></div>
                 <div class="inForm">password</div>
-                <div class="inForm bigger"><input type="password" id="pwd" name="pwd"></div>
+                <div class="inForm bigger"><input class="blackInput" type="password" id="pwd" name="pwd"></div>
                 <div class="inForm">confirm</div>
-                <div class="inForm bigger"><input type="password" id="pwdc"></div>
+                <div class="inForm bigger"><input class="blackInput" type="password" id="pwdc"></div>
                 <div class="inForm"><div id="submit" class="button">Submit</div></div>
             </div>
         </form>

@@ -1,5 +1,5 @@
 <?php
-require '../require/dblogin.php';
+require_once '../require/dblogin.php';
 
 // check if user is allowed to upload
 if(!empty($_POST['key'])){

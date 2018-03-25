@@ -1,16 +1,13 @@
 <?php 
-$limit=10;
-
-require './dblogin.php';
-require './cookieLogin.php';
-$count=$db->prepare('SELECT COUNT(*) FROM files WHERE id_user=? AND deleted=0');
+$limit=16;
+require_once './dblogin.php';
+require_once './cookieLogin.php';
 $q=$db->prepare('SELECT id, name, type, path FROM files WHERE id_user=:id AND deleted=0 ORDER BY date DESC LIMIT :limit OFFSET :offset');
 $_POST['offset']--;
 $q->bindValue(':id', $user['id']);
 $q->bindValue(':limit', $limit, PDO::PARAM_INT);
 $q->bindValue(':offset', (int)$_POST['offset'], PDO::PARAM_INT);
-$count->execute([$user['id']]);
-$count=$count->fetchColumn();
+$count=$user['fileCount'];
 $q->execute();
 $q=$q->fetchAll();
 $i=0;

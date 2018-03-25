@@ -1,6 +1,6 @@
 <?php
-require './require/dblogin.php';
-require './require/cookieLogin.php';
+require_once './require/dblogin.php';
+require_once './require/cookieLogin.php';
 ?>
 <!DOCTYPE html>
 <html>
@@ -33,12 +33,12 @@ require './require/cookieLogin.php';
                     }else if($('#pwd').val()!==$('#pwdc').val()){
                         alert('Passwords do not match')
                     }else{
-                        $.post('require/resetPwd.php', data=>{
+                        $.post('require/resetPwd.php', $('#form').serialize(), data=>{
                             data=JSON.parse(data)
                             if(data.success===true){
                                 alert('Password updated')
                             }else{
-                                alert('Your password could not be updated: '+data)
+                                alert('Your password could not be updated: '+data.msg)
                             }
                         })
                     }
@@ -52,17 +52,21 @@ require './require/cookieLogin.php';
                 Your API key is:<br><span id="key"><?php echo $user['apikey']; ?></span><br><br>
                 Here are the configuration files for
                 <a class="gr" href="examples/fuckmy.cat.sxcu">ShareX</a> or <a class="gr" href="examples/fuckmy.cat.uploader">KShare</a>.<br>
-                Just save it, fill in your API key and import it.
+                Just save it, fill in your API key and import it.<br><br>
+                Upload limit: <?php echo round($user['maxSize']/1000000, 3); ?> MB<br>
+                Current size: <?php echo round($user['actSize']/1000000, 3); ?> MB<br>
+                File count: <?php echo $user['fileCount']; ?><br>
+                Including deleted: <?php echo $user['fileCountWDel']; ?>
                 <div class="btnWrapper"><div class="button" id="reset">Reset Key</div></div>
                 <div class="btnWrapper"><div class="button" id="pwdButton">Change password</div></div>
                 <form id="form" action="require/resetPwd.php" method="post">
                     <div class="paddingtop formContainer">
                         <div class="inForm">Old password</div>
-                        <div class="inForm bigger"><input type="password" name="old"></div>
+                        <div class="inForm bigger"><input type="password" class="blackInput" name="old"></div>
                         <div class="inForm">New password</div>
-                        <div class="inForm bigger"><input type="password" id="pwd" name="new"></div>
+                        <div class="inForm bigger"><input type="password" class="blackInput" id="pwd" name="new"></div>
                         <div class="inForm">Confirm  password</div>
-                        <div class="inForm bigger"><input type="password" id="pwdc"></div>
+                        <div class="inForm bigger"><input type="password" class="blackInput" id="pwdc"></div>
                     </div>
                     <div class="btnWrapper"><div id="submit" class="button">Submit</div></div>
                 </form>
