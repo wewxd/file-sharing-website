@@ -1,8 +1,8 @@
 # file-sharing-website
-A file sharing website I use to upload and manage screenshots and other files. Still WIP.  
+A file sharing website I use to upload and manage screenshots and other files.  
 You can find it here: https://fuckmy.cat  
  
-<img src="https://letme.fuckmy.cat/AjTlk.png" width="60%">
+<img src="https://letme.fuckmy.cat/OewTl.png">
 
 ### Run it on your website
 You need to have a working web server with PHP and MySQL or MariaDB.
@@ -17,6 +17,5 @@ You need to have a working web server with PHP and MySQL or MariaDB.
 
 ### To-do
 * Allow users to mark files as "important" so they're deleted after regular files when the user reaches his upload limit
-* Replace the "delete" button by an "info" button in the list of uploaded files
 * Show thumbnails instead of the raw uploaded image in the list of uploaded files
 * Add nice pictures (Font Awesome?) as thumbnails for other files than images in the list of uploaded files
