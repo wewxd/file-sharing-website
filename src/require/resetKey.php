@@ -1,4 +1,5 @@
 <?php
+header('Content-Type: application/json');
 require_once './dblogin.php';
 require_once './cookieLogin.php';
 $str=str_shuffle('azertyuiopqsdfghjklmwxcvbnAZERTYUIOPQSDFGHJKLMWXCVBN');
