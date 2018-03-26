@@ -1,4 +1,5 @@
 <?php
+header('Content-Type: application/json');
 require_once '../require/dblogin.php';
 
 // check if user is allowed to upload
