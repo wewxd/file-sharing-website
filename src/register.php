@@ -1,8 +1,8 @@
 <?php
 if(file_exists(getenv('HOME').'/fmc.conf')){
-$conf=json_decode(file_get_contents(getenv('HOME').'/fmc.conf'), true);
+    $conf=json_decode(file_get_contents(getenv('HOME').'/fmc.conf'), true);
 }else{
-die('No config file found at '.getenv('HOME').'/fmc.conf');
+    die('No config file found at '.getenv('HOME').'/fmc.conf');
 }
 ?>
 <!DOCTYPE html>

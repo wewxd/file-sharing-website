@@ -1,6 +1,6 @@
 {
-    "name": "fuckmy.cat",
-    "target": "https://fuckmy.cat/api/upload.php",
+    "name": "NAME",
+    "target": "https://DOMAIN.NAME/api/upload.php",
     "format": "multipart-form-data",
     "body": [
         {
