@@ -1,4 +1,5 @@
 <?php 
+header('Content-Type: application/json');
 // Check if an account already exists with the same username/email
 require_once '../require/dblogin.php';
 if($conf['allowNewAccounts']==false){

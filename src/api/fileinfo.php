@@ -1,4 +1,5 @@
 <?php
+header('Content-Type: application/json');
 require_once'../require/dblogin.php';
 if(empty($_POST['file'])){
 }

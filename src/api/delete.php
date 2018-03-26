@@ -1,4 +1,6 @@
 <?php
+header('Content-Type: application/json');
+
 require_once '../require/dblogin.php';
 
 // check if the user is allowed to delete the file
