@@ -71,7 +71,7 @@ body{
     cursor: pointer;
     border-radius: 4px;
 }
-.button5em{
+.em5{
     width: 5em;
 }
 .nomargintop{
@@ -179,11 +179,29 @@ b{
 .blackInput:focus{
     border: 1px solid #b82525;
 }
+.infoWrapper{
+    width: 100%;
+    height: 15em;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background-color: #404040;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+.infoWrapper td{
+    padding: 0.3em;
+}
 @media only screen and (min-width: 768px){
     .wrapper{
         width: 25em;
     }
     .bigwrapper{
         width: 37em;
+    }
+    .infoWrapper{
+        width: 27em;
     }
 }

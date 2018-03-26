@@ -43,6 +43,16 @@ require_once './require/cookieLogin.php';
                         })
                     }
                 }
+
+                $('.size').each(function(){$(this).html(getSizeStr($(this).html()))})
+
+                function getSizeStr(size){
+                    let sizes=['Bytes', 'KB', 'MB', 'GB']
+                    if(size==0) return '0 bytes'
+                    let i=parseInt(Math.floor(Math.log(size)/Math.log(1024)))
+                    if(i===0) return (size/Math.pow(1024, i)) + '' + sizes[i]
+                    return (size/Math.pow(1024, i)).toFixed(1) + '' + sizes[i]
+                }
             })
         </script>
     </head>
@@ -53,8 +63,8 @@ require_once './require/cookieLogin.php';
                 Here are the configuration files for
                 <a class="gr" href="examples/fuckmy.cat.sxcu">ShareX</a> or <a class="gr" href="examples/fuckmy.cat.uploader">KShare</a>.<br>
                 Just save it, fill in your API key and import it.<br><br>
-                Upload limit: <?php echo round($user['maxSize']/1000000, 3); ?> MB<br>
-                Current size: <?php echo round($user['actSize']/1000000, 3); ?> MB<br>
+                Upload limit: <span class="size"><?php echo $user['maxSize']; ?></span><br>
+                Current size: <span class="size"><?php echo $user['actSize']; ?></span><br>
                 File count: <?php echo $user['fileCount']; ?><br>
                 Including deleted: <?php echo $user['fileCountWDel']; ?>
                 <div class="btnWrapper"><div class="button" id="reset">Reset Key</div></div>

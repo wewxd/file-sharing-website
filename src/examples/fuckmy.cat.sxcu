@@ -1,6 +1,6 @@
 {
-  "Name": "NAME",
-  "RequestURL": "https://DOMAIN.NAME/api/upload.php",
+  "Name": "fuckmy.cat",
+  "RequestURL": "https://fuckmy.cat/api/upload.php",
   "FileFormName": "file",
   "Arguments": {
     "key": "INSERT KEY",

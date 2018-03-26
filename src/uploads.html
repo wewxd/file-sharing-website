@@ -12,14 +12,37 @@
                 $(document).on('click', '.uplImg', function(){
                     location.href=$(this).parent().find('a').attr('href')
                 })
+                // Show file info
+                $(document).on('click', '.info', function(){
+                    $.post('api/fileinfo.php', {file: $(this).closest('.upl').attr('id')}, data=>{
+                        data=JSON.parse(data)
+                        str='<table class="fileInfoTable">'
+                        str+='<tr><td>Name</td><td>'+data.name+'</td></tr>'
+                        str+='<tr><td>Type</td><td>'+data.type+'</td></tr>'
+                        str+='<tr><td>Size</td><td>'+getSizeStr(data.size)+'</td></tr>'
+                        str+='<tr><td>Date</td><td>'+data.date+'</td></tr>'
+                        str+='<tr><td>URL</td><td><a class="gr" href="'+data.url+'">'+data.url.substr(8)+'"</a></td></tr>'
+                        str+='<tr><td><div class="button em5 delete">delete</div></td><td><div class="button em5 ok">ok</div></td></tr>'
+                        str+='</table>'
+                        str+='<input type="hidden" id="fileId" value="'+data.id+'">'
+                        $('.uploadsWrapper').css('filter', 'blur(5px)')
+                       $('body').append('<div id="infoWrapper" class="infoWrapper">'+str+'</div>')
+                    })
+                })
+                $(document).on('click', '.ok', function(){
+                    $('.uploadsWrapper').css('filter', '')
+                    $('.infoWrapper').remove()
+                })
                 // Delete a file
                 $(document).on('click', '.delete', function(){
-                    $.post('api/delete.php', {file: $(this).closest('.upl').attr('id')}, data=>{
+                    $.post('api/delete.php', {file: $('#fileId').val()}, data=>{
                         data=JSON.parse(data)
                         if(data.success===false){
                             alert(data.msg)
                         }else{
-                            $(this).closest('.upl').remove()
+                            $('#'+$('#fileId').val()).closest('.upl').remove()
+                            $('.uploadsWrapper').css('filter', '')
+                            $('.infoWrapper').remove()
                         }
                     })
                 })
@@ -66,13 +89,20 @@
                                 }
                                 str+=upl.name+'<div class="smolflex"><div>'
                                 str+='<a class="gr" href="'+upl.url+'">'+upl.newName+'</a></div>'
-                                str+='<div>-</div><div class="gr delete">delete</div></div>'
+                                str+='<div>-</div><div class="gr info">info</div></div>'
                                 $('#uploads').append(str)
                             })
                         }catch(e){$('#uploads').append(data)}
                     })
                 }
 
+                function getSizeStr(size){
+                    let sizes=['Bytes', 'KB', 'MB', 'GB']
+                    if(size==0) return '0 bytes'
+                    let i=parseInt(Math.floor(Math.log(size)/Math.log(1024)))
+                    if(i===0) return (size/Math.pow(1024, i)) + '' + sizes[i]
+                    return (size/Math.pow(1024, i)).toFixed(1) + '' + sizes[i]
+                }
                 // Initialisation
                 let filesPerPage
                 let total
@@ -82,16 +112,18 @@
         </script>
     </head>
     <body>
-        <h2>Your uploads</h2>
-        <hr class="transparent">
-        Showing files <span id="st"></span> to <span id="end"></span> (total: <span id="total"></span>)
-        <div class="pages">
-            <div id="first" class="clickable inPages">&#8249;&#8249;</div>
-            <div id="prev" class="clickable inPages">&#8249;</div>
-            <div id="act" class="inPages"><input id="pageInput" type="text" class="pageInput"></div>
-            <div id="next" class="clickable inPages">&#8250;</div>
-            <div id="last" class="clickable inPages">&#8250;&#8250;</div>
+        <div class="uploadsWrapper">
+            <h2>Your uploads</h2>
+            <hr class="transparent">
+            Showing files <span id="st"></span> to <span id="end"></span> (total: <span id="total"></span>)
+            <div class="pages">
+                <div id="first" class="clickable inPages">&#8249;&#8249;</div>
+                <div id="prev" class="clickable inPages">&#8249;</div>
+                <div id="act" class="inPages"><input id="pageInput" type="text" class="pageInput"></div>
+                <div id="next" class="clickable inPages">&#8250;</div>
+                <div id="last" class="clickable inPages">&#8250;&#8250;</div>
+            </div>
+            <div id="uploads" class="uploads"></div>
         </div>
-        <div id="uploads" class="uploads"></div>
     </body>
 </html>

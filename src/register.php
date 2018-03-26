@@ -1,8 +1,8 @@
 <?php
 if(file_exists(getenv('HOME').'/fmc.conf')){
-    $conf=json_decode(file_get_contents(getenv('HOME').'/fmc.conf'), true);
+$conf=json_decode(file_get_contents(getenv('HOME').'/fmc.conf'), true);
 }else{
-    die('No config file found at '.getenv('HOME').'/fmc.conf');
+die('No config file found at '.getenv('HOME').'/fmc.conf');
 }
 ?>
 <!DOCTYPE html>
@@ -27,6 +27,14 @@ if(file_exists(getenv('HOME').'/fmc.conf')){
                         alert('passwords do not match')
                     }else{$('#form').submit()}
                 }
+                $('#size').html(getSizeStr($('#size').html()))
+                function getSizeStr(size){
+                    let sizes=['Bytes', 'KB', 'MB', 'GB']
+                    if(size==0) return '0 bytes'
+                    let i=parseInt(Math.floor(Math.log(size)/Math.log(1024)))
+                    if(i===0) return (size/Math.pow(1024, i)) + '' + sizes[i]
+                    return (size/Math.pow(1024, i)).toFixed(1) + '' + sizes[i]
+                }
             })
         </script>
     </head>
@@ -34,7 +42,7 @@ if(file_exists(getenv('HOME').'/fmc.conf')){
         <div class="sometxt">
             hi<br><br>
             Here's a form you can fill if you want an account<br><br>
-            You can upload up to <?php echo round($conf['newAccountMaxSize']/1000000); ?> MB. After that, your old files get deleted as you upload new files.
+            You can upload up to <span id="size"><?php echo $conf['newAccountMaxSize']; ?></span>. After that, your old files get deleted as you upload new files.
         </div>
         <form id="form" action="api/newacc.php" method="post">
             <div class="formContainer paddingtop">
