@@ -4,7 +4,7 @@
         <meta charset="utf8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <link rel="stylesheet" href="style.css">
-        <title>Uploads</title>
+        <title>Uploads</title><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
         <script src="https://code.jquery.com/jquery-3.3.1.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script>
         <script>
             $(()=>{
@@ -15,34 +15,42 @@
                 // Show file info
                 $(document).on('click', '.info', function(){
                     $.post('api/fileinfo.php', {file: $(this).closest('.upl').attr('id')}, data=>{
-                        data=JSON.parse(data)
-                        str='<table class="fileInfoTable">'
-                        str+='<tr><td>Name</td><td>'+data.name+'</td></tr>'
-                        str+='<tr><td>Type</td><td>'+data.type+'</td></tr>'
-                        str+='<tr><td>Size</td><td>'+getSizeStr(data.size)+'</td></tr>'
-                        str+='<tr><td>Date</td><td>'+data.date+'</td></tr>'
-                        str+='<tr><td>URL</td><td><a class="gr" href="'+data.url+'">'+data.url.substr(8)+'"</a></td></tr>'
-                        str+='<tr><td><div class="button em5 delete">Delete</div></td><td><div class="button em5 ok">Close</div></td></tr>'
-                        str+='</table>'
-                        str+='<input type="hidden" id="fileId" value="'+data.id+'">'
+                        $('#filename').html(data.name)
+                        $('#fileimportant').html(data.important==1?'Yes':'No')
+                        $('#isImp').html(data.important==1?'not important':'important')
+                        $('#filetype').html(data.type)
+                        $('#filesize').html(data.size)
+                        $('#filedate').html(data.date)
+                        $('#fileurl a').html(data.url).attr('href', data.url)
+                        $('#fileId').val(data.id)
+                        $('#infoWrapper').show()
                         $('.uploadsWrapper').css('filter', 'blur(5px)')
-                       $('body').append('<div id="infoWrapper" class="infoWrapper">'+str+'</div>')
                     })
                 })
                 $(document).on('click', '.ok', function(){
                     $('.uploadsWrapper').css('filter', '')
-                    $('.infoWrapper').remove()
+                    $('.infoWrapper').hide()
                 })
                 // Delete a file
                 $(document).on('click', '.delete', function(){
                     $.post('api/delete.php', {file: $('#fileId').val()}, data=>{
-                        data=JSON.parse(data)
                         if(data.success===false){
                             alert(data.msg)
                         }else{
                             $('#'+$('#fileId').val()).closest('.upl').remove()
                             $('.uploadsWrapper').css('filter', '')
-                            $('.infoWrapper').remove()
+                            $('#infoWrapper').hide()
+                        }
+                    })
+                })
+                //Mark a file as important
+                $('#makeImp').on('click', ()=>{
+                    $.post('require/makeImportant.php', {file: $('#fileId').val()}, data=>{
+                        if(data.success==false){
+                            alert(data.msg)
+                        }else{
+                            $('#fileimportant').html(data.important==1?'Yes':'No')
+                            $('#isImp').html(data.important==1?'important':'not important')
                         }
                     })
                 })
@@ -73,26 +81,23 @@
                 // Reload the files
                 function update(offset){
                     $.post('require/getUploads.php', {offset: offset}, data=>{
-                        try{
-                            data=JSON.parse(data)
-                            $('#st').empty().append(data.start)
-                            $('#end').empty().append(data.end)
-                            $('#total').empty().append(data.total)
-                            $('#pageInput').val(data.start)
-                            total=data.total
-                            $('#uploads').empty()
-                            filesPerPage=data.data.length
-                            data.data.forEach(upl=>{
-                                let str='<div class="upl" id="'+upl.id+'">'
-                                if(upl.type.startsWith('image')){
-                                    str+='<img class="uplImg" src="'+upl.url+'">'
-                                }
-                                str+=upl.name+'<div class="smolflex"><div>'
-                                str+='<a class="gr" href="'+upl.url+'">'+upl.newName+'</a></div>'
-                                str+='<div>-</div><div class="gr info">info</div></div>'
-                                $('#uploads').append(str)
-                            })
-                        }catch(e){$('#uploads').append(data)}
+                        $('#st').empty().append(data.start)
+                        $('#end').empty().append(data.end)
+                        $('#total').empty().append(data.total)
+                        $('#pageInput').val(data.start)
+                        total=data.total
+                        $('#uploads').empty()
+                        filesPerPage=data.data.length
+                        data.data.forEach(upl=>{
+                            let str='<div class="upl" id="'+upl.id+'">'
+                            if(upl.type.startsWith('image')){
+                                str+='<img class="uplImg" src="'+upl.url+'">'
+                            }
+                            str+=upl.name+'<div class="smolflex"><div>'
+                            str+='<a class="gr" href="'+upl.url+'">'+upl.newName+'</a></div>'
+                            str+='<div>-</div><div class="gr info">info</div></div>'
+                            $('#uploads').append(str)
+                        })
                     })
                 }
 
@@ -108,6 +113,7 @@
                 let total
                 let page=1
                 update(page)
+                $('#infoWrapper').hide()
             })
         </script>
     </head>
@@ -124,6 +130,25 @@
                 <div id="last" class="clickable inPages">&#8250;&#8250;</div>
             </div>
             <div id="uploads" class="uploads"></div>
+        </div>
+        <div id="infoWrapper" class="infoWrapper">
+            <table class="fileInfoTable">
+                <tr><td>Name</td><td id="filename"></td></tr>
+                <tr><td>Important</td><td id="fileimportant"</td></tr>
+                <tr><td>Type</td><td id="filetype"></td></tr>
+                <tr><td>Size</td><td id="filesize"></td></tr>
+                <tr><td>Date</td><td id="filedate"></td></tr>
+                <tr><td>URL</td><td id="fileurl"><a class="gr"></a></td></tr>
+            </table>
+            <input type="hidden" id="fileId" value="'+data.id+'">
+            <div class="importantFilesTxt">
+                "Important" files are only deleted after the "regular" files when you reach your upload limit.<br><br>
+                <span id="makeImp" class="gr">Mark this file as <span id="isImp"></span></span>
+                <div class="delFlex">
+                    <div><i class="fa fa-trash delete" style="color:#b82525;font-size:3em;"></i></div>
+                    <div><i class="fa fa-close ok" style="color:#b82525;font-size:3em;"></i></div>
+                </div>
+            </div>
         </div>
     </body>
 </html>

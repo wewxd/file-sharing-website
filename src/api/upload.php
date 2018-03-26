@@ -1,4 +1,5 @@
 <?php
+header('Content-Type: application/json');
 require_once '../require/dblogin.php';
 
 // check if user is allowed to upload
@@ -24,7 +25,7 @@ if($user['allowed']==0){
     die('{"success": false, "msg": "This user is not allowed to upload"}');
 }
 if($file['size']>$user['maxSize']){
-    die('{"success": false, "msg": "File too big"}');
+    die('{"success": false, "msg": "File too large"}');
 }
 
 

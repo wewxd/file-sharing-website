@@ -36,7 +36,6 @@ require_once './require/cookieLogin.php';
                         timeout: 600000,
                         beforeSend: ()=>$('#uploadedUrls').append('<span class="tmp gr">Uploading...</span>'),
                         success: data=>{
-                            data=JSON.parse(data)
                             str=data.success===true?'<a class="gr" href="'+data.url+'">'+data.url+'</a></br>':data.msg+'<br>'
                             $('.tmp').remove()
                             $('#uploadedUrls').append(str)

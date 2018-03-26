@@ -19,3 +19,4 @@ You need to have a working web server with PHP and MySQL or MariaDB.
 * Allow users to mark files as "important" so they're deleted after regular files when the user reaches his upload limit
 * Show thumbnails instead of the raw uploaded image in the list of uploaded files
 * Add nice pictures (Font Awesome?) as thumbnails for other files than images in the list of uploaded files
+* Add some filters in the list of uploaded files

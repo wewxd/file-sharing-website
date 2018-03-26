@@ -14,7 +14,6 @@ require_once './require/cookieLogin.php';
             $(document).ready(()=>{
                 $('#reset').on('click', ()=>{
                     $.post('require/resetKey.php', data=>{
-                        data=JSON.parse(data)
                         if(data.success===true){
                             $('#key').empty().text(data.key)
                         }else{alert(data.msg)}
@@ -34,7 +33,6 @@ require_once './require/cookieLogin.php';
                         alert('Passwords do not match')
                     }else{
                         $.post('require/resetPwd.php', $('#form').serialize(), data=>{
-                            data=JSON.parse(data)
                             if(data.success===true){
                                 alert('Password updated')
                             }else{

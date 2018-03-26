@@ -1,4 +1,5 @@
 <?php
+header('Content-Type: application/json');
 require_once '../require/dblogin.php';
 
 // check if the user is allowed to delete the file
@@ -28,7 +29,7 @@ if(empty($file)||$file['deleted']!=0||$file['id_user']!==$user['id']){
     die('{"success": false, "msg": "This file does not exist, or it\'s not yours."}');
 }
 
-// deletes the file and updates the database
+// delete the file and update the database
 $user['fileCount']--;
 $user['actSize']-=$file['size'];
 $qu=$db->prepare('UPDATE users SET fileCount=?, actSize=? WHERE id=?');
