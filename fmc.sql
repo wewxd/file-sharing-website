@@ -36,6 +36,7 @@ CREATE TABLE `files` (
   `path` varchar(255) NOT NULL,
   `date` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
   `deleted` tinyint(1) NOT NULL,
+  `important` tinyint(1) NOT NULL,
   `hash` varchar(32) NOT NULL,
   `id_user` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
