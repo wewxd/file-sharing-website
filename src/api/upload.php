@@ -58,26 +58,30 @@ $user['fileCountWDel']++;
 $user['actSize']+=$file['size'];
 $qf=$db->prepare('INSERT INTO files(name, type, size, path, hash, id_user) VALUES (?,?,?,?,?,?)');
 $qu=$db->prepare('UPDATE users SET fileCount=?, fileCountWDel=?, actSize=? WHERE id=?');
-$qf->execute([$file['name'], $fileType, $file['size'], $uploadPath.$filename, $hash, $user['id']]);
 $qu->execute([$user['fileCount'], $user['fileCountWDel'], $user['actSize'], $user['id']]);
 
 // Delete old files if the user has reached his upload limit
-if($user['actSize']>$user['maxSize']){
-    $userFiles=$db->prepare('SELECT id, size, path FROM files WHERE id_user=? AND deleted=0 ORDER BY date');
-    $userFiles->execute([$user['id']]);
+$deleteImportant=0;
+while($user['actSize']>$user['maxSize']){
+    $userFiles=$db->prepare('SELECT id, size, path FROM files WHERE id_user=? AND deleted=0 AND important=? ORDER BY date LIMIT 100');
+    $userFiles->execute([$user['id'], $deleteImportant]);
     $userFiles=$userFiles->fetchAll();
-    $i=0;
-    while($user['actSize']>$user['maxSize']){
-        unlink($userFiles[$i]['path']);
+    foreach($userFiles as $row){
+        if($user['actSize']<$user['maxSize']){ break; }
+        unlink($row['path']);
         $delReq=$db->prepare('UPDATE files SET deleted=1 WHERE id=?');
-        $delReq->execute([$userFiles[$i]['id']]);
-        $user['actSize']-=$userFiles[$i]['size'];
+        $delReq->execute([$row['id']]);
+        $user['actSize']-=$row['size'];
         $user['fileCount']--;
-        $i++;
     }
     $updateUsr=$db->prepare('UPDATE users SET actSize=?, fileCount=? WHERE id=?');
     $updateUsr->execute([$user['actSize'], $user['fileCount'], $user['id']]);
+    if(count($userFiles)==0) $deleteImportant=1;
 }
+
+// The uploaded file isn't marked as "important" by default. If it is added in the database before the old files get deleted,
+// it will be deleted if all the other files are "important" and the user reaches his upload limit.
+$qf->execute([$file['name'], $fileType, $file['size'], $uploadPath.$filename, $hash, $user['id']]);
 
 // Return the URL
 echo '{"success":true,"url":"'.$conf['url'].$filename.'"}';
