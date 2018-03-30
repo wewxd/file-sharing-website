@@ -6,116 +6,7 @@
         <link rel="stylesheet" href="style.css">
         <title>Uploads</title><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
         <script src="https://code.jquery.com/jquery-3.3.1.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script>
-        <script>
-            $(()=>{
-                // Make the images clickable as links
-                $(document).on('click', '.uplImg', function(){
-                    location.href=$(this).parent().find('a').attr('href')
-                })
-                // Show file info
-                $(document).on('click', '.info', function(){
-                    $.post('api/fileinfo.php', {file: $(this).closest('.upl').attr('id')}, data=>{
-                        $('#filename').html(data.name)
-                        $('#fileimportant').html(data.important==1?'Yes':'No')
-                        $('#isImp').html(data.important==1?'not important':'important')
-                        $('#filetype').html(data.type)
-                        $('#filesize').html(data.size)
-                        $('#filedate').html(data.date)
-                        $('#fileurl a').html(data.url).attr('href', data.url)
-                        $('#fileId').val(data.id)
-                        $('#infoWrapper').show()
-                        $('.uploadsWrapper').css('filter', 'blur(5px)')
-                    })
-                })
-                $(document).on('click', '.ok', function(){
-                    $('.uploadsWrapper').css('filter', '')
-                    $('.infoWrapper').hide()
-                })
-                // Delete a file
-                $(document).on('click', '.delete', function(){
-                    $.post('api/delete.php', {file: $('#fileId').val()}, data=>{
-                        if(data.success===false){
-                            alert(data.msg)
-                        }else{
-                            $('#'+$('#fileId').val()).closest('.upl').remove()
-                            $('.uploadsWrapper').css('filter', '')
-                            $('#infoWrapper').hide()
-                        }
-                    })
-                })
-                //Mark a file as important
-                $('#makeImp').on('click', ()=>{
-                    $.post('require/makeImportant.php', {file: $('#fileId').val()}, data=>{
-                        if(data.success==false){
-                            alert(data.msg)
-                        }else{
-                            $('#fileimportant').html(data.important==1?'Yes':'No')
-                            $('#isImp').html(data.important==1?'not important':'important')
-                        }
-                    })
-                })
-                // Pagination: arrows
-                $(document).on('click', '.clickable', function(){
-                    if($(this).attr('id')==='first') page=1
-                    if($(this).attr('id')==='prev') page=Math.max(1, page-filesPerPage)
-                    if($(this).attr('id')==='next') page=Math.min(total-filesPerPage+1, page+filesPerPage)
-                    if($(this).attr('id')==='last') page=total-filesPerPage+1
-                    update(page)
-                })
-                // Pagination: text input
-                $('#pageInput').on('click', function(){
-                    $(this).val('')
-                })
-                $('#pageInput').keydown(function(event){
-                    if(event.key.match(/\D/)) event.preventDefault()
-                    if(event.keyCode===13){
-                        $(this).blur()
-                        if($(this).val()=='') $(this).val('1')
-                        page=$('#pageInput').val()
-                        page=Math.min(page, total-filesPerPage+1)
-                        page=Math.max(page, 1)
-                        update(page)
-                    }
-                })
-
-                // Reload the files
-                function update(offset){
-                    $.post('require/getUploads.php', {offset: offset}, data=>{
-                        $('#st').empty().append(data.start)
-                        $('#end').empty().append(data.end)
-                        $('#total').empty().append(data.total)
-                        $('#pageInput').val(data.start)
-                        total=data.total
-                        $('#uploads').empty()
-                        filesPerPage=data.data.length
-                        data.data.forEach(upl=>{
-                            let str='<div class="upl" id="'+upl.id+'">'
-                            if(upl.type.startsWith('image')){
-                                str+='<img class="uplImg" src="'+upl.url+'">'
-                            }
-                            str+=upl.name+'<div class="smolflex"><div>'
-                            str+='<a class="gr" href="'+upl.url+'">'+upl.newName+'</a></div>'
-                            str+='<div>-</div><div class="gr info">info</div></div>'
-                            $('#uploads').append(str)
-                        })
-                    })
-                }
-
-                function getSizeStr(size){
-                    let sizes=['Bytes', 'KB', 'MB', 'GB']
-                    if(size==0) return '0 bytes'
-                    let i=parseInt(Math.floor(Math.log(size)/Math.log(1024)))
-                    if(i===0) return (size/Math.pow(1024, i)) + '' + sizes[i]
-                    return (size/Math.pow(1024, i)).toFixed(1) + '' + sizes[i]
-                }
-                // Initialisation
-                let filesPerPage
-                let total
-                let page=1
-                update(page)
-                $('#infoWrapper').hide()
-            })
-        </script>
+        <script src="scripts.js"></script>
     </head>
     <body>
         <div class="uploadsWrapper">
@@ -129,18 +20,18 @@
                 <div id="next" class="clickable inPages">&#8250;</div>
                 <div id="last" class="clickable inPages">&#8250;&#8250;</div>
             </div>
-            <div id="uploads" class="uploads"></div>
+            <div id="uploadsList" class="uploads"></div>
         </div>
         <div id="infoWrapper" class="infoWrapper">
             <table class="fileInfoTable">
                 <tr><td>Name</td><td id="filename"></td></tr>
-                <tr><td>Important</td><td id="fileimportant"</td></tr>
+                <tr><td>Important</td><td id="fileimportant"></td></tr>
                 <tr><td>Type</td><td id="filetype"></td></tr>
                 <tr><td>Size</td><td id="filesize"></td></tr>
                 <tr><td>Date</td><td id="filedate"></td></tr>
                 <tr><td>URL</td><td id="fileurl"><a class="gr"></a></td></tr>
             </table>
-            <input type="hidden" id="fileId" value="'+data.id+'">
+            <input type="hidden" id="fileId">
             <div class="importantFilesTxt">
                 "Important" files are only deleted after the "regular" files when you reach your upload limit.<br><br>
                 <span id="makeImp" class="gr">Mark this file as <span id="isImp"></span></span>

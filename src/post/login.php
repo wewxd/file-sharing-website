@@ -1,6 +1,6 @@
 <?php 
 // Nginx handles brute-force attacks, not this script or any other
-require_once './dblogin.php';
+require_once '../require/dblogin.php';
 // Verify login informations
 $q=$db->prepare('SELECT id, pwd, apikey FROM users WHERE name=?');
 $q->execute([$_POST['name']]);

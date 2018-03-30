@@ -1,7 +1,7 @@
 <?php
 header('Content-Type: application/json');
-require_once './dblogin.php';
-require_once './cookieLogin.php';
+require_once '../require/dblogin.php';
+require_once '../require/cookieLogin.php';
 if(empty($_POST['file'])){
     die('{"success": false, "msg": "Please select a file"}');
 }

@@ -1,9 +1,9 @@
 <?php 
 header('Content-Type: application/json');
-$limit=16;
+$limit=24;
 
-require_once './dblogin.php';
-require_once './cookieLogin.php';
+require_once '../require/dblogin.php';
+require_once '../require/cookieLogin.php';
 $q=$db->prepare('SELECT id, name, type, path FROM files WHERE id_user=:id AND deleted=0 ORDER BY date DESC LIMIT :limit OFFSET :offset');
 $_POST['offset']--;
 $q->bindValue(':id', $user['id']);

@@ -5,36 +5,18 @@
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <link rel="stylesheet" href="style.css">
         <script src="https://code.jquery.com/jquery-3.3.1.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script>
-        <script>
-            $(document).ready(()=>{
-                $('input').keyup(event=>{
-                    if(event.keyCode===13)submitForm()
-                })
-                $('#login').on('click', ()=>{
-                    submitForm()
-                })
-                function submitForm(){
-                    $.post({
-                        url: 'require/login.php',
-                        data: $('#loginform').serialize(),
-                        success: data=>{
-                            data==='reload'?location.reload():alert(data)
-                        }
-                    })
-                }
-            })
-        </script>
+        <script src="scripts.js"></script>
         <title>fuck my cat</title>
     </head>
     <body>
         <div class="wrapper">
-            <form id="loginform" action="require/login.php" method="post">
+            <form id="loginform" action="post/login.php" method="post">
                 <h2 class="nomargintop marginbottom">Log in</h2>
                 <div class="formContainer">
                     <div class="inForm">name</div>
-                    <div class="inForm bigger"><input class="blackInput" type="text" name="name"></div>
+                    <div class="inForm bigger"><input class="logInput blackInput" type="text" name="name"></div>
                     <div class="inForm">password</div>
-                    <div class="inForm bigger"><input class="blackInput" type="password" name="pwd"></div>
+                    <div class="inForm bigger"><input class="logInput blackInput" type="password" name="pwd"></div>
                     <div id="login" class="inForm bigger"><div class=" button5em button">Log in</div></div>
                     <div class="inHome bigger"><div class="paddingtop"><a class="gr" href="contact.html">infos/contact idk</a></div></div>
                 </div>

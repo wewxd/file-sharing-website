@@ -15,8 +15,13 @@ You need to have a working web server with PHP and MySQL or MariaDB.
   (probably ` sudo chown www-data /path/to/uploaded/files `)
 * Also modify src/contact.html and the configuration files for ShareX and KShare in src/examples.
 
+### Some cool features
+* Per account upload limit
+* Users can mark files as "important" so they're only deleted after regular files when the user reaches the upload limit  
+* Files are hashed to detect identical files. A hard link is created if two identical files are uploaded.
+* Obviously, it's possible to automatically upload screenshots with ShareX or any other tool that supports custom uploaders
+
 ### To-do
-* Allow users to mark files as "important" so they're deleted after regular files when the user reaches his upload limit
-* Show thumbnails instead of the raw uploaded image in the list of uploaded files
+* Show a thumbnails instead of the raw uploaded image in the list of uploaded files
 * Add nice pictures (Font Awesome?) as thumbnails for other files than images in the list of uploaded files
 * Add some filters in the list of uploaded files

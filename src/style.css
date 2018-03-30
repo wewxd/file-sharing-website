@@ -88,6 +88,7 @@ b{
     width: 10em;
 }
 .uploads{
+    word-wrap: break-word;
     display: flex;
     flex-wrap: wrap;
     justify-content: center;
