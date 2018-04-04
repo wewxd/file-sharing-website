@@ -22,8 +22,7 @@ if(!empty($q->fetch())){
 // Update the database
 $q=$db->prepare('INSERT INTO users (name, mail, maxSize, fileCount, actSize, pwd, apikey, allowed) VALUES (?, ?, ?, 0, 0, ?, ?, 1)');
 $pwd=password_hash($_POST['pwd'], PASSWORD_DEFAULT);
-$str=str_shuffle('azertyuiopqsdfghjklmwxcvbnAZERTYUIOPQSDFGHJKLMWXCVBN');
-$key=substr(password_hash($pwd.$str, PASSWORD_DEFAULT), 20);
-$q->execute([$_POST['name'], $_POST['email'], $conf['newAccountMaxSize'], $pwd, $key]);
+$key=preg_replace('/\W/', '', base64_encode(random_bytes(35)));
+$q->execute([htmlentities($_POST['name']), $_POST['email'], $conf['newAccountMaxSize'], $pwd, $key]);
 echo "Account created";
 ?>

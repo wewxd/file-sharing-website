@@ -22,7 +22,7 @@ require_once './require/cookieLogin.php';
                 <div class="inHome"><div id="api" class="button">API info</div></div>
                 <div class="inHome"><div id="logout" class="button">Log out</div></div>
             </div>
-            <div class="inHome bigger"><div class="margintop"><a class="gr" href="contact.html">infos/contact idk</a></div></div>
+            <div class="inHome bigger"><div class="margintop"><a class="gr" href="contact.html">info/contact idk</a></div></div>
         </div>
         <form id="hiddenForm"><input type="file" name="file" id="inputFile"></form>
     </body>

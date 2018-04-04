@@ -81,7 +81,7 @@ while($user['actSize']>$user['maxSize']){
 
 // The uploaded file isn't marked as "important" by default. If it is added in the database before the old files get deleted,
 // it will be deleted if all the other files are "important" and the user reaches his upload limit.
-$qf->execute([$file['name'], $fileType, $file['size'], $uploadPath.$filename, $hash, $user['id']]);
+$qf->execute([htmlentities($file['name']), $fileType, $file['size'], $uploadPath.$filename, $hash, $user['id']]);
 
 // Return the URL
 echo '{"success":true,"url":"'.$conf['url'].$filename.'"}';

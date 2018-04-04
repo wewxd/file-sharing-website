@@ -1,8 +1,8 @@
 <?php
 if(file_exists(getenv('HOME').'/fmc.conf')){
-    $conf=json_decode(file_get_contents(getenv('HOME').'/fmc.conf'), true);
+$conf=json_decode(file_get_contents(getenv('HOME').'/fmc.conf'), true);
 }else{
-    die('No config file found at '.getenv('HOME').'/fmc.conf');
+die('No config file found at '.getenv('HOME').'/fmc.conf');
 }
 ?>
 <!DOCTYPE html>
@@ -12,26 +12,28 @@ if(file_exists(getenv('HOME').'/fmc.conf')){
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <script src="https://code.jquery.com/jquery-3.3.1.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script>
         <script>
-            $('#submit').on('click', ()=>{
-                submitForm()
+            $(()=>{
+                $('#submit').on('click', ()=>{
+                    submitForm()
+                })
+                $('input').keyup(event=>{
+                    if(event.keyCode===13)submitForm()
+                })
+                function submitForm(){
+                    if($('#pwd').val()===''||$('#name').val()===''||$('#email').val()===''){alert('Some fields are empty')}
+                    else if($('#pwd').val()!==$('#pwdc').val()){
+                        alert('passwords do not match')
+                    }else{$('#form').submit()}
+                }
+                $('#size').html(getSizeStr($('#size').html()))
+                function getSizeStr(size){
+                    let sizes=['Bytes', 'KB', 'MB', 'GB']
+                    if(size==0) return '0 bytes'
+                    let i=parseInt(Math.floor(Math.log(size)/Math.log(1024)))
+                    if(i===0) return (size/Math.pow(1024, i)) + '' + sizes[i]
+                    return (size/Math.pow(1024, i)).toFixed(1) + '' + sizes[i]
+                }
             })
-            $('input').keyup(event=>{
-                if(event.keyCode===13)submitForm()
-            })
-            function submitForm(){
-                if($('#pwd').val()===''||$('#name').val()===''||$('#email').val()===''){alert('Some fields are empty')}
-                else if($('#pwd').val()!==$('#pwdc').val()){
-                    alert('passwords do not match')
-                }else{$('#form').submit()}
-            }
-            $('#size').html(getSizeStr($('#size').html()))
-            function getSizeStr(size){
-                let sizes=['Bytes', 'KB', 'MB', 'GB']
-                if(size==0) return '0 bytes'
-                let i=parseInt(Math.floor(Math.log(size)/Math.log(1024)))
-                if(i===0) return (size/Math.pow(1024, i)) + '' + sizes[i]
-                return (size/Math.pow(1024, i)).toFixed(1) + '' + sizes[i]
-            }
         </script>
         <link rel="stylesheet" href="style.css" />
         <title>New account</title>
