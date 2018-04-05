@@ -22,7 +22,7 @@ if(empty($user)){
 if($user['allowed']==0){
     die('{"success": false, "msg": "This user is not allowed to delete"}');
 }
-$file=$db->prepare('SELECT id, size, path, deleted, id_user FROM files WHERE id=?');
+$file=$db->prepare('SELECT id, size, newName, thumbnail, deleted, id_user FROM files WHERE id=?');
 $file->execute([$_POST['file']]);
 $file=$file->fetch();
 if(empty($file)||$file['deleted']!=0||$file['id_user']!==$user['id']){
@@ -36,7 +36,8 @@ $qu=$db->prepare('UPDATE users SET fileCount=?, actSize=? WHERE id=?');
 $qf=$db->prepare('UPDATE files SET deleted=1 WHERE id=?');
 $qu->execute([$user['fileCount'], $user['actSize'], $user['id']]);
 $qf->execute([$file['id']]);
-unlink($file['path']);
+unlink($conf['path'].$file['newName']);
+if($file['thumbnail']==1) unlink($conf['thumbnailsPath'].$file['newName']);
 
 // end
 echo '{"success": true}';

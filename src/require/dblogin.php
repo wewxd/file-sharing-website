@@ -4,7 +4,6 @@ if(file_exists(getenv('HOME').'/fmc.conf')){
 }else{
     die('No config file found at '.getenv('HOME').'/fmc.conf');
 }
-$uploadPath=$conf['path'];
 $u=$conf['usr'];
 $p=$conf['pwd'];
 try{$db=new PDO('mysql:host=localhost;dbname=fmc',$u,$p);}

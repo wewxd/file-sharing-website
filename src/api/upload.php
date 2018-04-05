@@ -34,7 +34,7 @@ if($file['size']>$user['maxSize']){
 // also find file type
 $uploadPath=$conf['path'];
 $thmbnlPath=$conf['thumbnailsPath'];
-$thmbnlStr='';
+$thmbnl=0;
 $fileType=mime_content_type($file['tmp_name']);
 $hash=hash_file('md5', $file['tmp_name']);
 if(strrpos($file['name'], '.')==false||strlen($file['name'])-strrpos($file['name'], '.')>7){
@@ -46,7 +46,7 @@ if(strrpos($file['name'], '.')==false||strlen($file['name'])-strrpos($file['name
         $filename=substr(str_shuffle('azertyuiopqsdfghjklmwxcvbnAZERTYUIOPQSDFGHJKLMWXCVBN'), 0, 5).substr($file['name'], strrpos($file['name'], '.'));
     }while(file_exists($uploadPath.$filename));
 }
-$qExists=$db->prepare('SELECT id, path, thumbnail FROM files WHERE hash=? AND deleted=0');
+$qExists=$db->prepare('SELECT id, newName, thumbnail FROM files WHERE hash=? AND deleted=0');
 $qExists->execute([$hash]);
 $qExists=$qExists->fetch();
 if(empty($qExists)){
@@ -64,32 +64,32 @@ if(empty($qExists)){
             }
             $dest=imagecreatetruecolor($dim[0], $dim[1]);
             imagecopyresized($dest, $src, 0, 0, 0, 0, $dim[0], $dim[1], imagesx($src), imagesy($src));
-            imagejpeg($dest, $thmbnlPath.$filename);
-            $thmbnlStr=$thmbnlPath.$filename;
+            imagejpeg($dest, $thmbnlPath.$filename, 80);
+            $thmbnl=1;
         }
     }
 }else{
-    link($qExists['path'], $uploadPath.$filename);
-    $thmbnlStr=$qExists['thumbnail'];
+    link($uploadPath.$qExists['newName'], $uploadPath.$filename);
+    $thmbnl=1;
 }
 
 // Update the database
 $user['fileCount']++;
 $user['fileCountWDel']++;
 $user['actSize']+=$file['size'];
-$qf=$db->prepare('INSERT INTO files(name, type, size, path, thumbnail, hash, id_user) VALUES (?,?,?,?,?,?,?)');
+$qf=$db->prepare('INSERT INTO files(name, type, size, newName, thumbnail, hash, id_user) VALUES (?,?,?,?,?,?,?)');
 $qu=$db->prepare('UPDATE users SET fileCount=?, fileCountWDel=?, actSize=? WHERE id=?');
 $qu->execute([$user['fileCount'], $user['fileCountWDel'], $user['actSize'], $user['id']]);
 
 // Delete old files if the user has reached his upload limit
 $deleteImportant=0;
 while($user['actSize']>$user['maxSize']){
-    $userFiles=$db->prepare('SELECT id, size, path FROM files WHERE id_user=? AND deleted=0 AND important=? ORDER BY date LIMIT 100');
+    $userFiles=$db->prepare('SELECT id, size, newName FROM files WHERE id_user=? AND deleted=0 AND important=? ORDER BY date LIMIT 100');
     $userFiles->execute([$user['id'], $deleteImportant]);
     $userFiles=$userFiles->fetchAll();
     foreach($userFiles as $row){
         if($user['actSize']<$user['maxSize']){ break; }
-        unlink($row['path']);
+        unlink($uploadPath.$row['newName']);
         $delReq=$db->prepare('UPDATE files SET deleted=1 WHERE id=?');
         $delReq->execute([$row['id']]);
         $user['actSize']-=$row['size'];
@@ -102,7 +102,7 @@ while($user['actSize']>$user['maxSize']){
 
 // The uploaded file isn't marked as "important" by default. If it is added in the database before the old files get deleted,
 // it will be deleted if all the other files are "important" and the user reaches his upload limit.
-$qf->execute([htmlentities($file['name']), $fileType, $file['size'], $uploadPath.$filename, $thmbnlStr, $hash, $user['id']]);
+$qf->execute([htmlentities($file['name']), $fileType, $file['size'], $filename, $thmbnl, $hash, $user['id']]);
 
 // Return the URL
 echo '{"success":true,"url":"'.$conf['url'].$filename.'"}';

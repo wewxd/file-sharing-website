@@ -5,7 +5,7 @@ require_once '../require/cookieLogin.php';
 if(empty($_POST['file'])){
     die('{"success": false, "msg": "Please select a file"}');
 }
-$file=$db->prepare('SELECT id, deleted, important, id_user FROM files WHERE id=?');
+$file=$db->prepare('SELECT id, important, id_user FROM files WHERE id=? AND deleted=0');
 $file->execute([$_POST['file']]);
 $file=$file->fetch();
 if($user['id']!=$file['id_user']){

@@ -4,7 +4,7 @@ require_once'../require/dblogin.php';
 if(empty($_POST['file'])){
     die('{"success": false, "msg": "Please select a file"}');
 }
-$file=$db->prepare('SELECT id,name,type,size,path,date,deleted,important,hash FROM files WHERE id=?');
+$file=$db->prepare('SELECT id,name,type,size,newName,date,deleted,important,hash FROM files WHERE id=?');
 $file->execute([$_POST['file']]);
 $file=$file->fetch();
 if(empty($file['name']) && $file['deleted']==0){
@@ -17,6 +17,6 @@ $returned['size']=$file['size'];
 $returned['date']=$file['date'];
 $returned['important']=$file['important'];
 $returned['hash']=$file['hash'];
-$returned['url']=$conf['url'].basename($file['path']);
+$returned['url']=$conf['url'].$file['newName'];
 echo json_encode($returned);
 ?>

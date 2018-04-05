@@ -4,7 +4,7 @@ $limit=24;
 
 require_once '../require/dblogin.php';
 require_once '../require/cookieLogin.php';
-$q=$db->prepare('SELECT id, name, type, path FROM files WHERE id_user=:id AND deleted=0 ORDER BY date DESC LIMIT :limit OFFSET :offset');
+$q=$db->prepare('SELECT id, name, type, newName, thumbnail FROM files WHERE id_user=:id AND deleted=0 ORDER BY date DESC LIMIT :limit OFFSET :offset');
 $_POST['offset']--;
 $q->bindValue(':id', $user['id']);
 $q->bindValue(':limit', $limit, PDO::PARAM_INT);
@@ -14,8 +14,9 @@ $q->execute();
 $q=$q->fetchAll();
 $i=0;
 foreach($q as $row){
-    $response['data'][$i]['url']=$conf['url'].basename($row['path']);
-    $response['data'][$i]['newName']=basename($row['path']);
+    $response['data'][$i]['url']=$conf['url'].$row['newName'];
+    $response['data'][$i]['thumbnail']=$row['thumbnail']==1?$conf['thumbnailsUrl'].$row['newName']:'';
+    $response['data'][$i]['newName']=$row['newName'];
     $response['data'][$i]['name']=$row['name'];
     $response['data'][$i]['type']=$row['type'];
     $response['data'][$i]['id']=$row['id'];

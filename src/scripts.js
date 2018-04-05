@@ -93,7 +93,7 @@ $(document).ready(()=>{
             data.data.forEach(upl=>{
                 let str='<div class="upl" id="'+upl.id+'">'
                 if(upl.type.startsWith('image')){
-                    str+='<img class="uplImg" src="'+upl.url+'">'
+                    str+='<img class="uplImg" src="'+(upl.thumbnail||upl.url)+'">'
                 }
                 str+=upl.name+'<div class="smolflex"><div>'
                 str+='<a class="gr" href="'+upl.url+'">'+upl.newName+'</a></div>'

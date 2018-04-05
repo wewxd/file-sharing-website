@@ -3,9 +3,9 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: localhost:3306
--- Generation Time: Mar 25, 2018 at 12:56 AM
+-- Generation Time: Apr 05, 2018 at 10:51 PM
 -- Server version: 10.1.26-MariaDB-0+deb9u1
--- PHP Version: 7.0.27-0+deb9u1
+-- PHP Version: 7.1.15-1+0~20180306120016.15+stretch~1.gbp78327e
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 SET time_zone = "+00:00";
@@ -19,8 +19,6 @@ SET time_zone = "+00:00";
 --
 -- Database: `fmc`
 --
-CREATE DATABASE IF NOT EXISTS `fmc` DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci;
-USE `fmc`;
 
 -- --------------------------------------------------------
 
@@ -33,7 +31,8 @@ CREATE TABLE `files` (
   `name` varchar(128) NOT NULL,
   `type` varchar(100) NOT NULL,
   `size` bigint(11) NOT NULL,
-  `path` varchar(255) NOT NULL,
+  `newName` varchar(255) NOT NULL,
+  `thumbnail` tinyint(1) NOT NULL,
   `date` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
   `deleted` tinyint(1) NOT NULL,
   `important` tinyint(1) NOT NULL,
@@ -85,12 +84,12 @@ ALTER TABLE `users`
 -- AUTO_INCREMENT for table `files`
 --
 ALTER TABLE `files`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=490;
 --
 -- AUTO_INCREMENT for table `users`
 --
 ALTER TABLE `users`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6247;
 --
 -- Constraints for dumped tables
 --
