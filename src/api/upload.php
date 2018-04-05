@@ -15,7 +15,7 @@ if(empty($file['size'])){
     die('{"success": false, "msg": "Please provide a file"}');
 }
 
-$user=$db->prepare('SELECT * FROM users WHERE apikey=?');
+$user=$db->prepare('SELECT id, maxSize, fileCount, fileCountWDel, actSize, allowed FROM users WHERE apikey=?');
 $user->execute([$key]);
 $user=$user->fetch();
 if(empty($user)){
@@ -32,6 +32,9 @@ if($file['size']>$user['maxSize']){
 // Hash the file to prevent uploading the same file multiple times, and generate a file name
 // If an identical file exists, a new link is generated but points to the same file
 // also find file type
+$uploadPath=$conf['path'];
+$thmbnlPath=$conf['thumbnailsPath'];
+$thmbnlStr='';
 $fileType=mime_content_type($file['tmp_name']);
 $hash=hash_file('md5', $file['tmp_name']);
 if(strrpos($file['name'], '.')==false||strlen($file['name'])-strrpos($file['name'], '.')>7){
@@ -43,20 +46,38 @@ if(strrpos($file['name'], '.')==false||strlen($file['name'])-strrpos($file['name
         $filename=substr(str_shuffle('azertyuiopqsdfghjklmwxcvbnAZERTYUIOPQSDFGHJKLMWXCVBN'), 0, 5).substr($file['name'], strrpos($file['name'], '.'));
     }while(file_exists($uploadPath.$filename));
 }
-$qExists=$db->prepare('SELECT id, path FROM files WHERE hash=? AND deleted=0');
+$qExists=$db->prepare('SELECT id, path, thumbnail FROM files WHERE hash=? AND deleted=0');
 $qExists->execute([$hash]);
 $qExists=$qExists->fetch();
 if(empty($qExists)){
     move_uploaded_file($file['tmp_name'], $uploadPath.$filename);
+    // Create a thumbnail if the file is a large image
+    if(substr($fileType, 0, 5)=='image'){
+        if($fileType=='image/jpeg'){ $src=imagecreatefromjpeg($uploadPath.$filename);}
+        if($fileType=='image/png'){ $src=imagecreatefrompng($uploadPath.$filename);}
+        if($fileType=='image/gif'){ $src=imagecreatefromgif($uploadPath.$filename);}
+        if(imagesx($src)>$conf['thumbnailSize'][0]||imagesy($src)>$conf['thumbnailSize'][1]){
+            if(imagesx($src)/$conf['thumbnailSize'][0]>=imagesy($src)/$conf['thumbnailSize'][1]){
+                $dim=[$conf['thumbnailSize'][0], imagesy($src)/(imagesx($src)/$conf['thumbnailSize'][0])];
+            }else{
+                $dim=[imagesx($src)/(imagesy($src)/$conf['thumbnailSize'][1]), $conf['thumbnailSize'][1]];
+            }
+            $dest=imagecreatetruecolor($dim[0], $dim[1]);
+            imagecopyresized($dest, $src, 0, 0, 0, 0, $dim[0], $dim[1], imagesx($src), imagesy($src));
+            imagejpeg($dest, $thmbnlPath.$filename);
+            $thmbnlStr=$thmbnlPath.$filename;
+        }
+    }
 }else{
     link($qExists['path'], $uploadPath.$filename);
+    $thmbnlStr=$qExists['thumbnail'];
 }
 
 // Update the database
 $user['fileCount']++;
 $user['fileCountWDel']++;
 $user['actSize']+=$file['size'];
-$qf=$db->prepare('INSERT INTO files(name, type, size, path, hash, id_user) VALUES (?,?,?,?,?,?)');
+$qf=$db->prepare('INSERT INTO files(name, type, size, path, thumbnail, hash, id_user) VALUES (?,?,?,?,?,?,?)');
 $qu=$db->prepare('UPDATE users SET fileCount=?, fileCountWDel=?, actSize=? WHERE id=?');
 $qu->execute([$user['fileCount'], $user['fileCountWDel'], $user['actSize'], $user['id']]);
 
@@ -81,7 +102,7 @@ while($user['actSize']>$user['maxSize']){
 
 // The uploaded file isn't marked as "important" by default. If it is added in the database before the old files get deleted,
 // it will be deleted if all the other files are "important" and the user reaches his upload limit.
-$qf->execute([htmlentities($file['name']), $fileType, $file['size'], $uploadPath.$filename, $hash, $user['id']]);
+$qf->execute([htmlentities($file['name']), $fileType, $file['size'], $uploadPath.$filename, $thmbnlStr, $hash, $user['id']]);
 
 // Return the URL
 echo '{"success":true,"url":"'.$conf['url'].$filename.'"}';
