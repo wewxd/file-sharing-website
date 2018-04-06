@@ -23,5 +23,4 @@ You need to have a working web server with PHP and MySQL or MariaDB.
 * Obviously, it's possible to automatically upload screenshots with ShareX or any other tool that supports custom uploaders
 
 ### To-do
-* Add nice pictures (Font Awesome?) as thumbnails for other files than images in the list of uploaded files
 * Add some filters in the list of uploaded files
