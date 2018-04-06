@@ -10,8 +10,8 @@ $(document).ready(()=>{
         update(page)
     }
 
-    // Make the images clickable as links
-    $(document).on('click', '.uplImg', function(){
+    // Make the thumbnails clickable as links
+    $(document).on('click', '.thmbnl', function(){
         location.href=$(this).parent().find('a').attr('href')
     })
     // Show file info
@@ -91,10 +91,25 @@ $(document).ready(()=>{
             $('#uploadsList').empty()
             filesPerPage=data.data.length
             data.data.forEach(upl=>{
-                let str='<div class="upl" id="'+upl.id+'">'
-                if(upl.type.startsWith('image')){
-                    str+='<img class="uplImg" src="'+(upl.thumbnail||upl.url)+'">'
+                let str='<div class="upl" id="'+upl.id+'"><div class="thmbnl">'
+                switch(true){
+                    case upl.type.startsWith('image'):
+                        str+='<img class="uplImg" src="'+(upl.thumbnail||upl.url)+'">'
+                        break
+                    case upl.type.startsWith('text')||upl.type.includes('document'):
+                        str+='<i class="far fa-file-alt" style="font-size:6em;"></i>'
+                        break
+                    case upl.type.startsWith('audio'):
+                        str+='<i class="fas fa-music" style="font-size:6em;"></i>'
+                        break
+                    case upl.type.startsWith('video'):
+                        str+='<i class="fas fa-film" style="font-size:6em;"></i>'
+                        break
+                    case upl.type.startsWith('application'):
+                        str+='<i class="fas fa-cogs" style="font-size:6em;"></i>'
+                        break
                 }
+                str+='</div>'
                 str+=upl.name+'<div class="smolflex"><div>'
                 str+='<a class="gr" href="'+upl.url+'">'+upl.newName+'</a></div>'
                 str+='<div>-</div><div class="gr info">info</div></div>'

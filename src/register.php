@@ -8,7 +8,7 @@ die('No config file found at '.getenv('HOME').'/fmc.conf');
 <!DOCTYPE html>
 <html>
     <head>
-        <meta charset="utf8">
+        <meta charset="utf-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <script src="https://code.jquery.com/jquery-3.3.1.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script>
         <script>

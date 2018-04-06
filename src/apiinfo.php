@@ -5,7 +5,7 @@ require_once './require/cookieLogin.php';
 <!DOCTYPE html>
 <html>
     <head>
-        <meta charset="utf8">
+        <meta charset="utf-8">
         <title>API</title>
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <link rel="stylesheet" href="style.css">

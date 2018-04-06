@@ -109,12 +109,16 @@ b{
     flex-direction: column;
     justify-content: center;
 }
-.uplImg{
+.thmbnl{
     cursor: pointer;
     max-height: 80%;
-    width: 100%;
-    object-fit: contain;
+    max-width: 100%;
     margin-bottom: 1em;
+}
+.thmbnl img{
+    max-width: 100%;
+    max-height: 100%;
+    object-fit: contain;
 }
 .transparent{
     border-color: rgba(0,0,0,0);
@@ -208,7 +212,8 @@ b{
     margin-top: 3em;
     width: 70%;
 }
-.fa:hover{
+.fa, .far, .fas{
+    color: #A0A0A0;
     cursor: pointer;
 }
 @media only screen and (min-width: 768px){
