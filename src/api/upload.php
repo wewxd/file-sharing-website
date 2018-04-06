@@ -70,7 +70,10 @@ if(empty($qExists)){
     }
 }else{
     link($uploadPath.$qExists['newName'], $uploadPath.$filename);
-    $thmbnl=1;
+    if($qExists['thumbnail']==1){
+        $thmbnl=1;
+        link($thmbnlPath.$qExists['newName'], $thmbnlPath.$filename);
+    }
 }
 
 // Update the database
@@ -90,6 +93,7 @@ while($user['actSize']>$user['maxSize']){
     foreach($userFiles as $row){
         if($user['actSize']<$user['maxSize']){ break; }
         unlink($uploadPath.$row['newName']);
+        if($row['thumbnail']==1) unlink($thmbnlPath.$row['newName']);
         $delReq=$db->prepare('UPDATE files SET deleted=1 WHERE id=?');
         $delReq->execute([$row['id']]);
         $user['actSize']-=$row['size'];

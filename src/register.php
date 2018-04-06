@@ -44,7 +44,7 @@ die('No config file found at '.getenv('HOME').'/fmc.conf');
             <br>
             You can upload up to <span id="size"><?php echo $conf['newAccountMaxSize']; ?></span>. After that, your old files get deleted as you upload new files.
         </div>
-        <form id="form" action="api/newacc.php" method="post">
+        <form id="form" action="post/newacc.php" method="post">
             <div class="formContainer paddingtop">
                 <div class="inForm">name</div>
                 <div class="inForm bigger"><input class="blackInput" type="text" id="name" name="name"></div>
