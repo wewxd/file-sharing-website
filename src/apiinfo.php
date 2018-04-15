@@ -36,6 +36,7 @@ require_once './require/cookieLogin.php';
                     </div>
                     <div class="btnWrapper"><div id="resetPwd" class="button">Submit</div></div>
                 </form>
+                <a href="/">Back to index/<a>
             </div>
         </div>
     </body>
