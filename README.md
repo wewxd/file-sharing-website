@@ -1,6 +1,8 @@
 # file-sharing-website
-A file sharing website I use to upload and manage screenshots and other files.  
+This is a file sharing website I use to upload and manage screenshots and other files.  
 You can find it here: https://fuckmy.cat  
+Actually i think i might rewrite it from scratch to do something cleaner. This lacks a router and a decent API.  
+I'll probably do it in python with flask.  
  
 <img src="https://letme.fuckmy.cat/OewTl.png">
 
